@@ -19,3 +19,15 @@ created by (Jon Schneider)[https://github.com/jkschneider] - thanks :)
 
 The `atlas.html` also taken from Jon Schneider shows the Atlas statistics, and is available on both the client and server
 to show how you may want to embed specific charts on both applications, available at `<root>/atlas.html`
+
+## Images
+Some screenshots of the Admin Server / Client:
+
+Admin Home: 
+![alt text](images/admin-home.png "Admin Server home page")
+
+Admin Client MS Page: 
+![alt text](images/admin-client-home.png "Admin Server Client MS home page")
+
+Admin Client MS Metrics Page: 
+![alt text](images/admin-client-metrics.png "Admin Server Client MS metrics page")
