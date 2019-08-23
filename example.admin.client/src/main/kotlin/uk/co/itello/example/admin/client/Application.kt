@@ -34,13 +34,13 @@ class Application {
                 val describeCluster = kafkaAdminClient.describeCluster()
                 val clusterId = describeCluster.clusterId().get(2000, MILLISECONDS)
                 val nodeCount = describeCluster.nodes().get(2000, MILLISECONDS).size
-                LOG.info("Health check requested - we're GOOD")
+                LOG.debug("Health check requested - we're GOOD")
                 Health.up()
                         .withDetail("clusterId", clusterId)
                         .withDetail("nodeCount", nodeCount)
                         .build()
             } catch (e: Exception) {
-                LOG.info("Health check requested - we're BAD", e)
+                LOG.warn("Health check requested - we're BAD", e)
                 Health.down()
                         .withException(e)
                         .build()
