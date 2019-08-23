@@ -1,0 +1,23 @@
+spring:
+  boot:
+    admin:
+      url: http://localhost:9090
+  application:
+    name: Admin Server MS
+---
+# tag::customization-external-views[]
+spring:
+  boot:
+    admin:
+      ui:
+        external-views:
+          - label: ATLAS
+            url: http://localhost:9090/atlas.html
+            order: 2000
+# end::customization-external-views[]
+---
+management:
+  metrics:
+    export:
+      atlas:
+        uri: http://localhost:7101/api/v1/publish

@@ -1,0 +1,40 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: Admin Client MS
+  boot:
+    admin:
+      client:
+        url: http://localhost:8080
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: client.group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    export:
+      atlas:
+        uri: http://localhost:7101/api/v1/publish
+    web:
+      server:
+        auto-time-requests: true
+
+
+
