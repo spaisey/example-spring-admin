@@ -22,7 +22,7 @@ import org.springframework.http.ResponseEntity.notFound as httpNotFound
 import org.springframework.http.ResponseEntity.ok as httpOk
 
 /**
- * Simple caching endpoint with also demonstrates a @Schedule. Both caches and scehdules are picked up by the admin
+ * Simple caching endpoint with also demonstrates a @Schedule. Both caches and schedules are picked up by the admin
  * server.
  */
 @RestController
