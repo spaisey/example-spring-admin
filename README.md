@@ -15,7 +15,7 @@ publish to a topic (included to show example of the Kafka metrics on the Admin S
 
     Also has a `SimulationController` which generates stats for the Atlas server - this is a copy of the Simulation 
 provided in the [Embedding Atlas into a Spring Boot 2 App](https://github.com/jkschneider/atlas-embedded#embedding-atlas-into-a-spring-boot-2-app) Repo,
-created by (Jon Schneider)[https://github.com/jkschneider] - thanks :)
+created by [Jon Schneider](https://github.com/jkschneider) - thanks :)
 
 The `atlas.html` also taken from Jon Schneider shows the Atlas statistics, and is available on both the client and server
 to show how you may want to embed specific charts on both applications, available at `<root>/atlas.html`
@@ -23,11 +23,17 @@ to show how you may want to embed specific charts on both applications, availabl
 ## Images
 Some screenshots of the Admin Server / Client:
 
-Admin Home: 
+Admin Server Home: 
 ![alt text](images/admin-home.png "Admin Server home page")
 
-Admin Client MS Page: 
+Admin Server - Client MS Page: 
 ![alt text](images/admin-client-home.png "Admin Server Client MS home page")
 
-Admin Client MS Metrics Page: 
+Admin Server - Client MS Metrics Page: 
 ![alt text](images/admin-client-metrics.png "Admin Server Client MS metrics page")
+
+Admin Server - Atlas Charts: 
+![alt text](images/admin-atlas.png "Admin Server Atlas page")
+
+Client - Atlas Charts: 
+![alt text](images/admin-client-atlas.png "Client Atlas page")
