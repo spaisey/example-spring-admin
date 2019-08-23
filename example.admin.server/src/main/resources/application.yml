@@ -4,6 +4,8 @@ spring:
       url: http://localhost:9090
   application:
     name: Admin Server MS
+
+# THIS EXAMPLE OF EMBEDDING A VIEW IS NOT WORKING YET - TAKEN FROM : https://github.com/codecentric/spring-boot-admin/blob/master/spring-boot-admin-samples/spring-boot-admin-sample-servlet/src/main/resources/application.yml
 ---
 # tag::customization-external-views[]
 spring:
