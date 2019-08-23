@@ -1,9 +1,12 @@
 package uk.co.itello.example.admin.client
 
 import org.slf4j.LoggerFactory
+import org.springframework.boot.actuate.audit.AuditEvent
+import org.springframework.boot.actuate.audit.listener.AuditApplicationEvent
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.scheduling.annotation.Scheduled
@@ -27,7 +30,7 @@ import org.springframework.http.ResponseEntity.ok as httpOk
  */
 @RestController
 @RequestMapping("cache")
-class CachedPayloadController {
+class CachedPayloadController(private val publisher: ApplicationEventPublisher) {
     private val store = ConcurrentHashMap<String, String>()
 
     companion object {
@@ -44,7 +47,7 @@ class CachedPayloadController {
     fun create(@RequestBody payload: String): ResponseEntity<Unit> {
         val id = UUID.randomUUID().toString()
         store[id] = payload
-        LOG.info("Created: $id")
+        publisher.publishEvent(AuditApplicationEvent(AuditEvent("ANON_USER", "RECORD_CREATED", payload)))
         return ResponseEntity.created(URI("/cache/$id")).build()
     }
 
@@ -71,8 +74,11 @@ class CachedPayloadController {
      */
     @DeleteMapping(ID_PATH_VARIABLE_MAPPING)
     @CacheEvict(CACHE_NAME)
-    fun remove(@PathVariable(ID_PATH_VARIABLE) id: String): ResponseEntity<String> =
-            if (store[id] == null) httpNotFound().build() else httpOk(store.remove(id)!!)
+    fun remove(@PathVariable(ID_PATH_VARIABLE) id: String): ResponseEntity<String> {
+        publisher.publishEvent(AuditApplicationEvent(AuditEvent("ANON_USER", "RECORD_DELETED", id)))
+        return if (store[id] == null) httpNotFound().build() else httpOk(store.remove(id)!!)
+    }
+
 
     /**
      * Clear all records
