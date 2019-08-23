@@ -14,7 +14,7 @@
 	<logger name="uk.co.itello" level="DEBUG" additivity="false">
 		<appender-ref ref="STDOUT"/>
 	</logger>
-	<logger name="org.springframework" level="DEBUG" additivity="false">
+	<logger name="org.springframework" level="INFO" additivity="false">
 		<appender-ref ref="STDOUT"/>
 	</logger>
 
