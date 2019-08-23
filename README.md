@@ -12,6 +12,10 @@ Run using `java -jar atlas-x.x.x-standalone.jar memory.conf`
 1. `example.admin.client` - Spring Boot Application Admin Client. Spring Kafka included with a simple endpoint to
 publish to a topic (included to show example of the Kafka metrics on the Admin Server - I run Kafka via docker using
 `docker run -p 2181:2181 -p 9092:9092 --env ADVERTISED_HOST=localhost --env ADVERTISED_PORT=9092 spotify/kafka`). 
+    
+    Kafka functionality in the `KafkaController` which allows you to send a message to a topic (use topic called '`test`')
+    
+    Caching and Scheduling (both of which are picked up by the Admin Server) are exhibited in the `CachedPayloadController`
 
     Also has a `SimulationController` which generates stats for the Atlas server - this is a copy of the Simulation 
 provided in the [Embedding Atlas into a Spring Boot 2 App](https://github.com/jkschneider/atlas-embedded#embedding-atlas-into-a-spring-boot-2-app) Repo,
@@ -24,16 +28,16 @@ to show how you may want to embed specific charts on both applications, availabl
 Some screenshots of the Admin Server / Client:
 
 Admin Server Home: 
-![alt text](images/admin-home.png "Admin Server home page")
+![Image of the Spring Admin Server home page](images/admin-home.png "Admin Server home page")
 
 Admin Server - Client MS Page: 
-![alt text](images/admin-client-home.png "Admin Server Client MS home page")
+![Image of the Spring Admin Server Micro Service detail page](images/admin-client-home.png "Admin Server Client MS home page")
 
 Admin Server - Client MS Metrics Page: 
-![alt text](images/admin-client-metrics.png "Admin Server Client MS metrics page")
+![Image of the Spring Admin Server Micro Service metrics page](images/admin-client-metrics.png "Admin Server Client MS metrics page")
 
 Admin Server - Atlas Charts: 
-![alt text](images/admin-atlas.png "Admin Server Atlas page")
+![Image of the Spring Admin Server Atlas chart page](images/admin-atlas.png "Admin Server Atlas page")
 
 Client - Atlas Charts: 
-![alt text](images/admin-client-atlas.png "Client Atlas page")
+![Image of the Client Micro Service Atlas chart page](images/admin-client-atlas.png "Client Atlas page")
