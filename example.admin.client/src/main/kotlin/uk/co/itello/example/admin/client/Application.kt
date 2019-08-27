@@ -5,13 +5,18 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.actuate.health.Health
 import org.springframework.boot.actuate.health.HealthIndicator
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer
 import org.springframework.boot.runApplication
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Bean
 import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.core.KafkaAdmin
 import org.springframework.scheduling.annotation.EnableScheduling
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.MILLISECONDS
+import javax.cache.configuration.MutableConfiguration
+import javax.cache.expiry.CreatedExpiryPolicy
+import javax.cache.expiry.Duration
 
 
 @SpringBootApplication
@@ -22,9 +27,20 @@ class Application {
     companion object {
         private val LOG = LoggerFactory.getLogger(Application::class.java)!!
     }
+
     @Bean
     fun kafkaAdminClient(admin: KafkaAdmin): AdminClient {
         return AdminClient.create(admin.config)
+    }
+
+    @Bean
+    fun cacheManagerCustomizer(): JCacheManagerCustomizer {
+        return JCacheManagerCustomizer { cacheManager ->
+            cacheManager.createCache(CachedPayloadController.CACHE_NAME, MutableConfiguration<Any, Any>()
+                    .setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(Duration(TimeUnit.MINUTES, 1)))
+                    .setStoreByValue(false)
+                    .setStatisticsEnabled(true))
+        }
     }
 
     @Bean

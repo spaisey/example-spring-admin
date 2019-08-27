@@ -1,11 +1,13 @@
 package uk.co.itello.example.admin.client
 
+import org.ehcache.CacheManager
 import org.slf4j.LoggerFactory
 import org.springframework.boot.actuate.audit.AuditEvent
 import org.springframework.boot.actuate.audit.listener.AuditApplicationEvent
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.cache.jcache.JCacheCacheManager
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -19,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
-import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicInteger
 import org.springframework.http.ResponseEntity.notFound as httpNotFound
 import org.springframework.http.ResponseEntity.ok as httpOk
 
@@ -34,9 +36,10 @@ class CachedPayloadController(private val publisher: ApplicationEventPublisher) 
     private val store = ConcurrentHashMap<String, String>()
 
     companion object {
-        private const val CACHE_NAME = "payload"
+        const val CACHE_NAME = "payload"
         private const val ID_PATH_VARIABLE = "id"
         private const val ID_PATH_VARIABLE_MAPPING = "{$ID_PATH_VARIABLE}"
+        private val idGenerator = AtomicInteger(1)
         private val LOG = LoggerFactory.getLogger(CachedPayloadController::class.java)
     }
 
@@ -45,7 +48,7 @@ class CachedPayloadController(private val publisher: ApplicationEventPublisher) 
      */
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun create(@RequestBody payload: String): ResponseEntity<Unit> {
-        val id = UUID.randomUUID().toString()
+        val id = idGenerator.getAndIncrement().toString()
         store[id] = payload
         publisher.publishEvent(AuditApplicationEvent(AuditEvent("ANON_USER", "RECORD_CREATED", payload)))
         return ResponseEntity.created(URI("/cache/$id")).build()
@@ -55,7 +58,7 @@ class CachedPayloadController(private val publisher: ApplicationEventPublisher) 
      * Retrieve a record
      */
     @GetMapping(ID_PATH_VARIABLE_MAPPING, produces = [MediaType.APPLICATION_JSON_VALUE])
-    @Cacheable(CACHE_NAME)
+    @Cacheable(value = [CACHE_NAME], key="#id")
     fun retrieve(@PathVariable(ID_PATH_VARIABLE) id: String): ResponseEntity<String> {
         LOG.info("Retrieving record [$id] from store")
         return if (store[id] == null) httpNotFound().build() else httpOk(store[id]!!)
